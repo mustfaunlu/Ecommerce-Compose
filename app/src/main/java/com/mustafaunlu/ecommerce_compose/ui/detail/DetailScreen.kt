@@ -1,5 +1,7 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.detail
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -18,13 +24,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
+import com.mustafaunlu.ecommerce_compose.ui.Error
+import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.DetailProductUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.DetailViewModel
 
@@ -66,6 +77,7 @@ fun ProductDetailScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SuccessScreen(
     uiData: DetailProductUiData,
@@ -81,20 +93,47 @@ fun SuccessScreen(
             modifier = modifier,
             verticalArrangement = Arrangement.Top,
         ) {
-            Box(
+            val state = rememberPagerState { uiData.imageUrl.size }
+            val pageCount = uiData.imageUrl.size
+            HorizontalPager(
+                state = state,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-            ) {
-                // ViewPager2 goes here
+            ) { page ->
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    model = uiData.imageUrl[page],
+                    contentDescription = uiData.title,
+                )
             }
+            Row(
+                Modifier
+                    .height(10.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                repeat(pageCount) { iteration ->
+                    val color = if (state.currentPage == iteration) MaterialTheme.colorScheme.primary else Color.LightGray
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .clip(CircleShape)
+                            .size(20.dp)
+                            .background(color = color),
 
+                    )
+                }
+            }
             Text(
                 text = uiData.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Start,
             )
 
             Text(
@@ -103,12 +142,11 @@ fun SuccessScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Justify,
             )
 
             Text(
-                text = uiData.price,
+                text = "${uiData.price} TL",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
