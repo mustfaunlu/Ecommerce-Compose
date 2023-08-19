@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,11 +31,11 @@ import com.mustafaunlu.ecommerce_compose.R
 
 @Composable
 fun ProfileScreen() {
-    var profileName by remember { mutableStateOf("John") }
-    var profileSurname by remember { mutableStateOf("Doe") }
-    var profileMail by remember { mutableStateOf("john.doe@example.com") }
-    var profilePhone by remember { mutableStateOf("+1 (555) 123-4567") }
-    var switchTheme by remember { mutableStateOf("Switch Theme") }
+    val profileName by remember { mutableStateOf("John") }
+    val profileSurname by remember { mutableStateOf("Doe") }
+    val profileMail by remember { mutableStateOf("john.doe@example.com") }
+    val profilePhone by remember { mutableStateOf("+1 (555) 123-4567") }
+    val switchTheme by remember { mutableStateOf("Switch Theme") }
     var isDarkTheme by remember { mutableStateOf(false) }
 
     Column(

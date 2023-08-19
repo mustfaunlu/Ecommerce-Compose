@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.favorite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

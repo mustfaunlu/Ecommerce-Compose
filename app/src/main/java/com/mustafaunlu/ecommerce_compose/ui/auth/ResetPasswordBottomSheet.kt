@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
