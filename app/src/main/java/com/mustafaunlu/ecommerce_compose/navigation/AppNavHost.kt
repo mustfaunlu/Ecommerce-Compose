@@ -1,13 +1,13 @@
-package com.mustafaunlu.ecommerce_compose.navigation
+package com.mustafaunlu.ecommerce_compose.navigation // ktlint-disable package-name
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mustafaunlu.ecommerce_compose.ui.CartRoute
-import com.mustafaunlu.ecommerce_compose.ui.DetailRoute
-import com.mustafaunlu.ecommerce_compose.ui.HomeRoute
+import com.mustafaunlu.ecommerce_compose.ui.cart.CartRoute
+import com.mustafaunlu.ecommerce_compose.ui.detail.DetailRoute
+import com.mustafaunlu.ecommerce_compose.ui.home.HomeRoute
 
 @Composable
 fun AppNavHost(

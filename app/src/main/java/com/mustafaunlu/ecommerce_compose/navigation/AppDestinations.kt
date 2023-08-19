@@ -6,7 +6,6 @@ import androidx.navigation.navArgument
 interface AppDestinations {
     val route: String
 }
-
 object Home : AppDestinations {
     override val route = "home"
 }
