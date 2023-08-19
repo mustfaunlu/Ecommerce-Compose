@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -12,17 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 
 @Composable
 fun CategoryItem(name: String, onCategoryClicked: (String) -> Unit) {
     Card(
         modifier = Modifier.padding(10.dp).clickable { onCategoryClicked(name) },
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp,
+            defaultElevation = 5.dp,
         ),
     ) {
         Text(
-            text = name,
+            text = name.capitalize(Locale.getDefault()),
             modifier = Modifier.padding(10.dp),
             style = MaterialTheme.typography.bodyMedium,
         )
