@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +36,7 @@ fun ProductItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp).clickable { onProductClicked(product) },
-        elevation = CardDefaults.cardElevation(10.dp),
+        elevation = CardDefaults.cardElevation(5.dp),
         shape = RoundedCornerShape(5.dp),
     ) {
         Column(
@@ -54,6 +55,8 @@ fun ProductItem(
 
             Text(
                 text = product.title,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -65,16 +68,27 @@ fun ProductItem(
 
             Text(
                 text = product.description,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
                 style = TextStyle(fontSize = 14.sp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
             )
 
-            // Replace with your rating content
+            Text(
+                text = "Rating ${product.rating}",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+            )
 
             Text(
-                text = product.price,
+                text = "${product.price} TL",
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,

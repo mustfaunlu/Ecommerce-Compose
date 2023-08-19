@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
+import com.mustafaunlu.ecommerce_compose.ui.Error
+import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.ProductUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.HomeViewModel
 import com.mustafaunlu.ecommorce_develop.ui.theme.AppTheme
