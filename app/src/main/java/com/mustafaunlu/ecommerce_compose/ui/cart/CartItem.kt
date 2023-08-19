@@ -1,6 +1,5 @@
-package com.mustafaunlu.ecommerce_compose.ui
+package com.mustafaunlu.ecommerce_compose.ui.cart
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
 
@@ -50,9 +51,9 @@ fun CartItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = null, // Provide content description
+            AsyncImage(
+                model = cartUiData.imageUrl,
+                contentDescription = stringResource(id = R.string.product_image_content), // Provide content description
                 modifier = Modifier
                     .size(60.dp),
             )
