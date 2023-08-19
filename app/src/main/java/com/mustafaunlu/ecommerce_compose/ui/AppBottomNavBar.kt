@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,36 +26,132 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mustafaunlu.ecommerce_compose.R
+import com.mustafaunlu.ecommerce_compose.navigation.Cart
+import com.mustafaunlu.ecommerce_compose.navigation.Favorite
+import com.mustafaunlu.ecommerce_compose.navigation.Home
+import com.mustafaunlu.ecommerce_compose.navigation.Profile
 
 @Composable
-fun AppBottomNavBar(modifier: Modifier = Modifier, badgeState: Int) {
+fun AppBottomNavBar(
+    modifier: Modifier = Modifier,
+    badgeState: Int,
+    navController: NavHostController,
+) {
     BottomNavigation(modifier, backgroundColor = MaterialTheme.colorScheme.outlineVariant) {
-        BottomNavigationItem(selected = true, onClick = {}, icon = {
-            Icon(imageVector = Icons.Default.Home, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-        }, label = {
-            Text(stringResource(R.string.navbar_menu_home), color = MaterialTheme.colorScheme.primary)
-        })
-        BottomNavigationItem(selected = false, onClick = {}, icon = {
-            IconWithBadge(badge = badgeState, icon = Icons.Default.ShoppingCart, tint = MaterialTheme.colorScheme.primary)
-        }, label = {
-            Text(stringResource(R.string.navbar_menu_cart), color = MaterialTheme.colorScheme.primary)
-        })
-        BottomNavigationItem(selected = false, onClick = {}, icon = {
-            Icon(imageVector = Icons.Default.Favorite, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-        }, label = {
-            Text(stringResource(R.string.favorite), color = MaterialTheme.colorScheme.primary)
-        })
-        BottomNavigationItem(selected = false, onClick = {}, icon = {
-            Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-        }, label = {
-            Text(stringResource(R.string.navbar_profile_cart), color = MaterialTheme.colorScheme.primary)
-        })
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        BottomNavigationItem(
+            selected = currentDestination?.hierarchy?.any { it.route == Home.route } == true,
+            onClick = {
+                navController.navigate(Home.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            },
+            label = {
+                Text(
+                    stringResource(R.string.navbar_menu_home),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            },
+        )
+        BottomNavigationItem(
+            selected = currentDestination?.hierarchy?.any { it.route == Cart.route } == true,
+            onClick = {
+                navController.navigate(Cart.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            icon = {
+                IconWithBadge(
+                    badge = badgeState,
+                    icon = Icons.Default.ShoppingCart,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            },
+            label = {
+                Text(
+                    stringResource(R.string.navbar_menu_cart),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            },
+        )
+        BottomNavigationItem(
+            selected = currentDestination?.hierarchy?.any { it.route == Favorite.route } == true,
+            onClick = {
+                navController.navigate(Favorite.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            },
+            label = {
+                Text(stringResource(R.string.favorite), color = MaterialTheme.colorScheme.primary)
+            },
+        )
+        BottomNavigationItem(
+            selected = currentDestination?.hierarchy?.any { it.route == Profile.route } == true,
+            onClick = {
+                navController.navigate(Profile.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            },
+            label = {
+                Text(
+                    stringResource(R.string.navbar_profile_cart),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            },
+        )
     }
 }
 
 @Composable
-fun IconWithBadge(badge: Int, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier = Modifier, tint: Color = LocalContentColor.current) {
+fun IconWithBadge(
+    badge: Int,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    modifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current,
+) {
     Box(modifier = Modifier.size(36.dp)) {
         Icon(
             imageVector = icon,
