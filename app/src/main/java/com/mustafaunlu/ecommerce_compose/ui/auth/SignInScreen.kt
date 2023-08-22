@@ -2,6 +2,7 @@ package com.mustafaunlu.ecommerce_compose.ui.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,10 +32,62 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
+import com.mustafaunlu.ecommerce_compose.common.ScreenState
+import com.mustafaunlu.ecommerce_compose.domain.entity.user.FirebaseSignInUserEntity
+import com.mustafaunlu.ecommerce_compose.ui.Error
+import com.mustafaunlu.ecommerce_compose.ui.Loading
+import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
+import com.mustafaunlu.ecommerce_compose.ui.viewModels.SigInViewModel
 
 @Composable
-fun SignInScreen() {
+fun SignInRoute(
+    viewModel: SigInViewModel = hiltViewModel(),
+    onGoSignUpButtonClicked: () -> Unit,
+    navigateToHomeScreen: () -> Unit,
+) {
+    val firebaseLoginState by viewModel.firebaseLoginState.observeAsState(initial = ScreenState.Loading)
+    val onSignInButtonClicked = { user: FirebaseSignInUserEntity ->
+        viewModel.loginWithFirebase(user)
+    }
+    SignInScreen(
+        onGoSignUpButtonClicked = onGoSignUpButtonClicked,
+        onSignInButtonClicked = onSignInButtonClicked,
+    )
+
+    SuccessScreen(
+        loginState = firebaseLoginState,
+        navigateToHomeScreen = navigateToHomeScreen,
+    )
+}
+
+@Composable
+fun SuccessScreen(
+    loginState: ScreenState<UserInformationUiData>,
+    navigateToHomeScreen: () -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (loginState) {
+            is ScreenState.Success -> {
+                navigateToHomeScreen()
+            }
+            ScreenState.Loading -> {
+                // Loading()
+            }
+
+            is ScreenState.Error -> {
+                Error(message = R.string.error)
+            }
+        }
+    }
+}
+
+@Composable
+fun SignInScreen(
+    onSignInButtonClicked: (FirebaseSignInUserEntity) -> Unit,
+    onGoSignUpButtonClicked: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +95,7 @@ fun SignInScreen() {
     ) {
         Spacer(modifier = Modifier.height(80.dp))
 
-        var username by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var showSheet by remember { mutableStateOf(false) }
 
@@ -52,12 +106,12 @@ fun SignInScreen() {
         }
 
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
+            value = email,
+            onValueChange = { email = it },
             label = { Text(text = stringResource(R.string.prompt_email)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
@@ -99,7 +153,12 @@ fun SignInScreen() {
 
         Button(
             onClick = {
-                // Handle sign-in button click
+                onSignInButtonClicked(
+                    FirebaseSignInUserEntity(
+                        email = email,
+                        password = password,
+                    ),
+                )
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -116,9 +175,6 @@ fun SignInScreen() {
                 text = stringResource(R.string.don_t_have_account),
                 fontSize = 12.sp,
                 color = Color.Gray,
-                modifier = Modifier.clickable(onClick = {
-                    // Handle sign-up text click
-                }),
             )
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -128,7 +184,7 @@ fun SignInScreen() {
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable(onClick = {
-                    // Handle sign-up button click
+                    onGoSignUpButtonClicked()
                 }),
             )
         }
@@ -140,5 +196,4 @@ fun SignInScreen() {
 @Preview
 @Composable
 fun SignInScreenPreview() {
-    SignInScreen()
 }

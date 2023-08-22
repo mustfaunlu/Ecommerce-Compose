@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,10 +36,9 @@ fun CartItem(
     onDecrement: () -> Unit,
 ) {
     Card(
-        modifier = Modifier.clickable { onCartItemClicked.invoke(cartUiData) }
+        modifier = Modifier.clickable { onCartItemClicked(cartUiData) }
             .fillMaxWidth()
-            .padding(15.dp)
-            .clickable { },
+            .padding(15.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp,
         ),
@@ -49,7 +49,7 @@ fun CartItem(
                 .fillMaxWidth()
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
         ) {
             AsyncImage(
                 model = cartUiData.imageUrl,
@@ -60,6 +60,8 @@ fun CartItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
+                    modifier = Modifier
+                        .widthIn(max = 150.dp),
                     text = cartUiData.title,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -69,6 +71,7 @@ fun CartItem(
                 Text(text = cartUiData.price.toString())
                 Spacer(modifier = Modifier.height(4.dp))
             }
+            Spacer(modifier = Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

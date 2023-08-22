@@ -34,7 +34,6 @@ fun HomeRoute(
 ) {
     val productState by viewModel.products.observeAsState(initial = ScreenState.Loading)
     val categoryState by viewModel.categories.observeAsState(initial = ScreenState.Loading)
-    val badgeState by viewModel.badge.observeAsState(initial = ScreenState.Loading)
     val onCategoryClicked = { category: String ->
         viewModel.getProductsByCategory(category)
     }
@@ -50,7 +49,7 @@ fun HomeRoute(
 fun HomeScreen(
     productState: ScreenState<List<ProductUiData>>?,
     categoryState: ScreenState<List<String>>,
-    onProductClicked: (ProductUiData) -> Unit = {},
+    onProductClicked: (ProductUiData) -> Unit,
     onCategoryClicked: (String) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {

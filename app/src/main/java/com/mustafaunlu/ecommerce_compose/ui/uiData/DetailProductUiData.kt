@@ -1,7 +1,7 @@
 package com.mustafaunlu.ecommerce_compose.ui.uiData
 
 data class DetailProductUiData(
-    val id: Int,
+    val productId: Int,
     val title: String,
     val description: String,
     val price: String,

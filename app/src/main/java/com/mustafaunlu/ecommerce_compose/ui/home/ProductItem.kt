@@ -112,7 +112,7 @@ fun ProductList(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(products.size) {
+        items(products.size, key = { products[it].id }) {
             ProductItem(
                 product = products[it],
                 onProductClicked = onProductClicked,

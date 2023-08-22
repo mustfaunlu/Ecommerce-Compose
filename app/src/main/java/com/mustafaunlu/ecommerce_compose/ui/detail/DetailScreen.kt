@@ -183,7 +183,7 @@ fun SuccessScreen(
                         onAddToCartButtonClicked(
                             UserCartEntity(
                                 userId = "",
-                                productId = uiData.id,
+                                productId = uiData.productId,
                                 quantity = 1,
                                 price = uiData.price.toInt(),
                                 title = uiData.title,
@@ -203,7 +203,7 @@ fun SuccessScreen(
                         onAddToFavoritesButtonClicked(
                             UserCartEntity(
                                 userId = "",
-                                productId = uiData.id,
+                                productId = uiData.productId,
                                 quantity = 1,
                                 price = uiData.price.toInt(),
                                 title = uiData.title,

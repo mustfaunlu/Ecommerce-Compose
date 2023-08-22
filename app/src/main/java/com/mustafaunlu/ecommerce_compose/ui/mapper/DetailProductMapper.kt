@@ -9,7 +9,7 @@ class DetailProductEntityToUiMapper @Inject constructor() :
     ProductBaseMapper<DetailProductEntity, DetailProductUiData> {
     override fun map(input: DetailProductEntity): DetailProductUiData {
         return DetailProductUiData(
-            id = input.id,
+            productId = input.id,
             title = input.title,
             description = input.description,
             price = input.price,

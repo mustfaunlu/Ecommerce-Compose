@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,13 +27,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
+import com.mustafaunlu.ecommerce_compose.common.ScreenState
+import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
+import com.mustafaunlu.ecommerce_compose.ui.viewModels.SignUpViewModel
 
 @Composable
-fun SignUpScreen() {
+fun SignUpRoute(
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navigateToSignInScreen: () -> Unit,
+) {
+    val signUpState by viewModel.signUp.observeAsState(initial = ScreenState.Loading)
+    val onCreateAccountButtonClicked = { user: UserInformationUiData ->
+        viewModel.signUp(user)
+    }
+    SignUpScreen(
+        onCreateAccountButtonClicked = onCreateAccountButtonClicked,
+        signUpState = signUpState,
+        navigateToSignInScreen = navigateToSignInScreen,
+    )
+}
+
+@Composable
+fun SignUpScreen(
+    onCreateAccountButtonClicked: (UserInformationUiData) -> Unit,
+    signUpState: ScreenState<UserInformationUiData>,
+    navigateToSignInScreen: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -130,13 +154,18 @@ fun SignUpScreen() {
             ),
         )
 
-        // Repeat the above pattern for surname, phone, email, and password fields
-
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = {
-                // Handle create account button click
+                checkEmptyFields(
+                    email = email,
+                    password = password,
+                    name = name,
+                    surname = surname,
+                    phone = phone,
+                    onSuccess = onCreateAccountButtonClicked,
+                )
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -162,15 +191,35 @@ fun SignUpScreen() {
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable(onClick = {
-                    // Handle log in button click
+                    navigateToSignInScreen()
                 }),
             )
         }
     }
 }
 
-@Composable
-@Preview
-fun SignUpScreenPreview() {
-    SignUpScreen()
+private fun checkEmptyFields(
+    email: String,
+    password: String,
+    name: String,
+    surname: String,
+    phone: String,
+    onSuccess: (UserInformationUiData) -> Unit,
+) {
+    if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && surname.isNotEmpty()) {
+        onSuccess(
+            UserInformationUiData(
+                id = "",
+                name = name,
+                surname = surname,
+                email = email,
+                phone = phone,
+                image = "",
+                password = password,
+                token = "",
+            ),
+        )
+    } else {
+        // Handle empty fields
+    }
 }

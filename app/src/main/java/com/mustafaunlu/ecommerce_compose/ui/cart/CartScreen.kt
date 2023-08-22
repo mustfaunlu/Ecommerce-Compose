@@ -34,7 +34,11 @@ import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
 import com.mustafaunlu.ecommorce_develop.ui.theme.AppTheme
 
 @Composable
-fun CartRoute(viewModel: CartViewModel = hiltViewModel()) {
+fun CartRoute(
+    viewModel: CartViewModel = hiltViewModel(),
+    onClickedBuyNowButton: () -> Unit,
+    onProductClicked: (UserCartUiData) -> Unit,
+) {
     val cartState by viewModel.userCarts.observeAsState(initial = ScreenState.Loading)
     var counterState by remember {
         mutableIntStateOf(0)
@@ -43,36 +47,61 @@ fun CartRoute(viewModel: CartViewModel = hiltViewModel()) {
         uiState = cartState,
         count = counterState,
         updateCount = { newCount -> counterState = newCount },
+        onClickedBuyNowButton = onClickedBuyNowButton,
+        onProductClicked = onProductClicked,
     )
 }
 
 @Composable
-fun CartScreen(uiState: ScreenState<List<UserCartUiData>>, count: Int, updateCount: (Int) -> Unit) {
+fun CartScreen(
+    uiState: ScreenState<List<UserCartUiData>>,
+    count: Int,
+    updateCount: (Int) -> Unit,
+    onClickedBuyNowButton: () -> Unit,
+    onProductClicked: (UserCartUiData) -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         when (uiState) {
             is ScreenState.Loading -> {
                 Loading()
             }
+
             is ScreenState.Error -> {
                 Error(message = R.string.error)
             }
+
             is ScreenState.Success -> {
-                SuccessScreen(uiData = uiState.uiData, modifier = Modifier.padding(16.dp), count = count, updateCount = updateCount)
+                SuccessScreen(
+                    uiData = uiState.uiData,
+                    modifier = Modifier.padding(16.dp),
+                    count = count,
+                    updateCount = updateCount,
+                    onProductClicked = onProductClicked,
+                    onClickedBuyNowButton = onClickedBuyNowButton,
+                )
             }
         }
     }
 }
 
 @Composable
-fun SuccessScreen(uiData: List<UserCartUiData>, modifier: Modifier = Modifier, count: Int, updateCount: (Int) -> Unit) {
+fun SuccessScreen(
+    uiData: List<UserCartUiData>,
+    modifier: Modifier = Modifier,
+    count: Int,
+    updateCount: (Int) -> Unit,
+    onClickedBuyNowButton: () -> Unit,
+    onProductClicked: (UserCartUiData) -> Unit,
+
+) {
     Box(modifier = modifier) {
-        LazyColumn {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(uiData.size) { cart ->
                 CartItem(
                     cartUiData = uiData[cart],
-                    onCartItemClicked = {},
-                    onIncrement = { updateCount.invoke(count + 1) },
-                    onDecrement = { updateCount.invoke(count - 1) },
+                    onCartItemClicked = onProductClicked,
+                    onIncrement = { updateCount(count + 1) },
+                    onDecrement = { updateCount(count - 1) },
                 )
             }
         }
@@ -111,7 +140,7 @@ fun SuccessScreen(uiData: List<UserCartUiData>, modifier: Modifier = Modifier, c
                 }
 
                 Button(
-                    onClick = { /* Handle buy now button click */ },
+                    onClick = { onClickedBuyNowButton() },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "Buy Now")
@@ -125,11 +154,18 @@ fun SuccessScreen(uiData: List<UserCartUiData>, modifier: Modifier = Modifier, c
 @Preview
 fun CartScreenPreview() {
     AppTheme {
-        SuccessScreen(uiData = listOfUserCartUiData, modifier = Modifier.padding(16.dp), count = 0, updateCount = {})
+        SuccessScreen(
+            uiData = listOfUserCartUiData,
+            modifier = Modifier.padding(16.dp),
+            count = 0,
+            updateCount = {},
+            onProductClicked = {},
+            onClickedBuyNowButton = {},
+        )
     }
 }
 
-val listOfUserCartUiData = listOf<UserCartUiData>(
+val listOfUserCartUiData = listOf(
     UserCartUiData(
         userId = 1.toString(),
         productId = 1,
