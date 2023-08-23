@@ -20,13 +20,13 @@ fun FavoriteRoute(
     onProductClicked: (FavoriteUiData) -> Unit,
 ) {
     val favoriteState by viewModel.favoriteCarts.observeAsState(initial = ScreenState.Loading)
-    val onLongClikced: (FavoriteUiData) -> Unit = { favoriteUiData ->
+    val onLongClicked: (FavoriteUiData) -> Unit = { favoriteUiData ->
         viewModel.deleteFavoriteItem(favoriteUiData)
     }
     FavoriteScreen(
         favoriteState = favoriteState,
         onProductClicked = onProductClicked,
-        onProductLongClicked = onLongClikced,
+        onProductLongClicked = onLongClicked,
 
     )
 }
