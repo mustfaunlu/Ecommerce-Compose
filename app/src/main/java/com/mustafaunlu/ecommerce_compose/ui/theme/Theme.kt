@@ -1,10 +1,15 @@
-package com.mustafaunlu.ecommorce_develop.ui.theme
+package com.mustafaunlu.ecommerce_compose.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+
+data class DarkTheme(val isDark: Boolean = false)
+
+val LocalTheme = compositionLocalOf { DarkTheme() }
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,

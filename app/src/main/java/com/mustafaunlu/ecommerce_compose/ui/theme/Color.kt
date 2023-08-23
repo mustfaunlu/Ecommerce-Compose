@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommorce_develop.ui.theme
+package com.mustafaunlu.ecommerce_compose.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF006973)
