@@ -52,8 +52,9 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun updateTotalPrice(totalPrice: Double) {
-        _totalPriceLiveData.value = totalPrice
+    fun updateTotalPrice(cartList: List<UserCartUiData>) {
+        getCartsByUserId()
+        _totalPriceLiveData.value = calculateTotalPrice(cartList)
     }
     fun deleteUserCartItem(userCartUiData: UserCartUiData) {
         viewModelScope.launch {
@@ -72,7 +73,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun calculateTotalPrice(cartList: List<UserCartUiData>): Double {
+    private fun calculateTotalPrice(cartList: List<UserCartUiData>): Double {
         var totalPrice = 0.0
         for (cart in cartList) {
             totalPrice += cart.price * cart.quantity

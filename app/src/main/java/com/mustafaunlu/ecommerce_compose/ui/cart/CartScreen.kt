@@ -15,9 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -31,7 +28,7 @@ import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
-import com.mustafaunlu.ecommorce_develop.ui.theme.AppTheme
+import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
 
 @Composable
 fun CartRoute(
@@ -40,25 +37,48 @@ fun CartRoute(
     onProductClicked: (UserCartUiData) -> Unit,
 ) {
     val cartState by viewModel.userCarts.observeAsState(initial = ScreenState.Loading)
-    var counterState by remember {
-        mutableIntStateOf(0)
+    val totalPrice by viewModel.totalPriceLiveData.observeAsState(initial = 0.0)
+
+    val updateCartItem = { cartUiData: UserCartUiData ->
+        viewModel.updateUserCartItem(cartUiData)
     }
+
+    val updateTotalAmount = { uiData: List<UserCartUiData> ->
+        viewModel.updateTotalPrice(uiData)
+    }
+
+    val onDecrement = { cartUiData: UserCartUiData ->
+        if (cartUiData.quantity > 1) {
+            val updated = cartUiData.copy(quantity = cartUiData.quantity.dec())
+            updateCartItem(updated)
+        }
+    }
+
+    val onIncrement = { cartUiData: UserCartUiData ->
+        val updated = cartUiData.copy(quantity = cartUiData.quantity.inc())
+        updateCartItem(updated)
+    }
+
     CartScreen(
         uiState = cartState,
-        count = counterState,
-        updateCount = { newCount -> counterState = newCount },
         onClickedBuyNowButton = onClickedBuyNowButton,
         onProductClicked = onProductClicked,
+        totalPrice = totalPrice,
+        onDecrement = onDecrement,
+        onIncrement = onIncrement,
+        updateTotalAmount = updateTotalAmount,
     )
 }
 
 @Composable
 fun CartScreen(
     uiState: ScreenState<List<UserCartUiData>>,
-    count: Int,
-    updateCount: (Int) -> Unit,
     onClickedBuyNowButton: () -> Unit,
     onProductClicked: (UserCartUiData) -> Unit,
+    totalPrice: Double,
+    onDecrement: (UserCartUiData) -> Unit,
+    onIncrement: (UserCartUiData) -> Unit,
+    updateTotalAmount: (List<UserCartUiData>) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         when (uiState) {
@@ -74,10 +94,12 @@ fun CartScreen(
                 SuccessScreen(
                     uiData = uiState.uiData,
                     modifier = Modifier.padding(16.dp),
-                    count = count,
-                    updateCount = updateCount,
                     onProductClicked = onProductClicked,
                     onClickedBuyNowButton = onClickedBuyNowButton,
+                    totalPrice = totalPrice,
+                    onDecrement = onDecrement,
+                    onIncrement = onIncrement,
+                    updateTotalAmount = updateTotalAmount,
                 )
             }
         }
@@ -88,10 +110,12 @@ fun CartScreen(
 fun SuccessScreen(
     uiData: List<UserCartUiData>,
     modifier: Modifier = Modifier,
-    count: Int,
-    updateCount: (Int) -> Unit,
     onClickedBuyNowButton: () -> Unit,
     onProductClicked: (UserCartUiData) -> Unit,
+    totalPrice: Double,
+    onDecrement: (UserCartUiData) -> Unit,
+    onIncrement: (UserCartUiData) -> Unit,
+    updateTotalAmount: (List<UserCartUiData>) -> Unit,
 
 ) {
     Box(modifier = modifier) {
@@ -100,8 +124,14 @@ fun SuccessScreen(
                 CartItem(
                     cartUiData = uiData[cart],
                     onCartItemClicked = onProductClicked,
-                    onIncrement = { updateCount(count + 1) },
-                    onDecrement = { updateCount(count - 1) },
+                    onIncrement = {
+                        onIncrement(uiData[cart])
+                        updateTotalAmount(uiData)
+                    },
+                    onDecrement = {
+                        onDecrement(uiData[cart])
+                        updateTotalAmount(uiData)
+                    },
                 )
             }
         }
@@ -132,7 +162,7 @@ fun SuccessScreen(
                             .weight(1f),
                     )
                     Text(
-                        text = "1000",
+                        text = totalPrice.toString(),
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
                         ),
@@ -154,14 +184,6 @@ fun SuccessScreen(
 @Preview
 fun CartScreenPreview() {
     AppTheme {
-        SuccessScreen(
-            uiData = listOfUserCartUiData,
-            modifier = Modifier.padding(16.dp),
-            count = 0,
-            updateCount = {},
-            onProductClicked = {},
-            onClickedBuyNowButton = {},
-        )
     }
 }
 
