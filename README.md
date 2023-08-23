@@ -1,7 +1,7 @@
 <h1 align="center">E-commerce Compose App</h1></br>
 <p align="center">  
-A sample e-commerce app built to demonstrate the use of Modern Android development tools. E-commerce App is a modern Android application that uses the latest tools and Jetpack Compose. Built with Kotlin and Android Architecture Components, it uses the latest cutting-edge technologies, components, and patterns. 
-MVVM + Clean Architecture approach.
+
+A sample e-commerce app built with [Jetpack Compose](https://developer.android.com/jetpack/compose/) and Android Architecture Components.
 
 </p></br>
 
@@ -27,7 +27,7 @@ This app is still under development and more screens will be added soon.
 - Minimum SDK level 24
 - 100% [Kotlin](https://kotlinlang.org/)
   based + [Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-  and [Flow](https://developer.android.com/kotlin/flow) & [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+  and [Flow](https://developer.android.com/kotlin/flow) & [State](https://developer.android.com/jetpack/compose/state#state-in-composables) & [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) -
   Collection of libraries that help you design robust, testable, and maintainable apps.
     - A single-activity architecture, using
