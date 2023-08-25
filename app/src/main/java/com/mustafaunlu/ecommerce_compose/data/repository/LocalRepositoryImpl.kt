@@ -1,6 +1,5 @@
 package com.mustafaunlu.ecommerce_compose.data.repository
 
-import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.FavoriteProductEntity
 import com.mustafaunlu.ecommerce_compose.domain.repository.LocalRepository
 import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
@@ -61,19 +60,9 @@ class LocalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserCartBadgeStateFromDb(userUniqueInfo: String): Flow<NetworkResponseState<UserCartBadgeEntity>> {
+    override suspend fun getBadgeCountFromDb(userId: String): Flow<NetworkResponseState<Int>> {
         return flow {
-            try {
-                emit(NetworkResponseState.Success(localDataSource.getUserCartBadgeStateFromDb(userUniqueInfo)))
-            } catch (e: Exception) {
-                emit(NetworkResponseState.Success(UserCartBadgeEntity("", false)))
-            }
+            emit(NetworkResponseState.Success(localDataSource.getBadgeCountFromDb(userId)))
         }.flowOn(ioDispatcher)
-    }
-
-    override suspend fun insertUserCartBadgeStateToDb(userBadge: UserCartBadgeEntity) {
-        withContext(ioDispatcher) {
-            localDataSource.insertUserCartBadgeCountToDb(userBadge)
-        }
     }
 }

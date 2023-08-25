@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
-import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
 import com.mustafaunlu.ecommerce_compose.domain.mapper.ProductBaseMapper
 import com.mustafaunlu.ecommerce_compose.domain.mapper.ProductListMapper
@@ -37,8 +36,12 @@ class CartViewModel @Inject constructor(
     private val _totalPriceLiveData: MutableLiveData<Double> = MutableLiveData(0.0)
     val totalPriceLiveData: LiveData<Double> get() = _totalPriceLiveData
 
+    private val _badgeCount = MutableLiveData<Int>()
+    val badgeCount: LiveData<Int> get() = _badgeCount
+
     init {
         getCartsByUserId()
+        getBadgeCount()
     }
     private fun getCartsByUserId() {
         viewModelScope.launch {
@@ -46,7 +49,9 @@ class CartViewModel @Inject constructor(
                 when (it) {
                     is NetworkResponseState.Error -> _userCarts.postValue(ScreenState.Error(it.exception.message!!))
                     is NetworkResponseState.Loading -> _userCarts.postValue(ScreenState.Loading)
-                    is NetworkResponseState.Success -> _userCarts.postValue(ScreenState.Success(mapper.map(it.result)))
+                    is NetworkResponseState.Success -> {
+                        _userCarts.postValue(ScreenState.Success(mapper.map(it.result)))
+                    }
                 }
             }
         }
@@ -66,10 +71,17 @@ class CartViewModel @Inject constructor(
             updateCartUseCase(singleMapper.map(userCartUiData))
         }
     }
-
-    fun setBadgeState(badgeState: UserCartBadgeEntity) {
+    fun getBadgeCount() {
         viewModelScope.launch {
-            badgeUseCase(badgeState)
+            badgeUseCase(getUserIdFromSharedPref(sharedPreferences)).collect {
+                when (it) {
+                    is NetworkResponseState.Error -> _badgeCount.postValue(0)
+                    is NetworkResponseState.Loading -> _badgeCount.postValue(0)
+                    is NetworkResponseState.Success -> {
+                        _badgeCount.postValue(it.result)
+                    }
+                }
+            }
         }
     }
 

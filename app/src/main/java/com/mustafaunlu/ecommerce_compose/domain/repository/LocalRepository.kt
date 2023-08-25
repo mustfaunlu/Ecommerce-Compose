@@ -1,9 +1,8 @@
 package com.mustafaunlu.ecommerce_compose.domain.repository
 
 import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
-import com.mustafaunlu.ecommerce_compose.domain.entity.product.FavoriteProductEntity
-import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
+import com.mustafaunlu.ecommerce_compose.domain.entity.product.FavoriteProductEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
@@ -22,7 +21,5 @@ interface LocalRepository {
 
     suspend fun deleteFavoriteProduct(favoriteProductEntity: FavoriteProductEntity)
 
-    suspend fun getUserCartBadgeStateFromDb(userUniqueInfo: String): Flow<NetworkResponseState<UserCartBadgeEntity>>
-
-    suspend fun insertUserCartBadgeStateToDb(userBadge: UserCartBadgeEntity)
+    suspend fun getBadgeCountFromDb(userId: String): Flow<NetworkResponseState<Int>>
 }

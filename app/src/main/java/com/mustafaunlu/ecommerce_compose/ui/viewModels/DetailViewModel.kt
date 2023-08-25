@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
-import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.DetailProductEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.FavoriteProductEntity
@@ -80,12 +79,6 @@ class DetailViewModel @Inject constructor(
                     ),
                 ),
             )
-        }
-    }
-
-    fun insertBadgeStatusToDb(userCartBadgeEntity: UserCartBadgeEntity) {
-        viewModelScope.launch {
-            badgeUseCase.invoke(userCartBadgeEntity)
         }
     }
 }

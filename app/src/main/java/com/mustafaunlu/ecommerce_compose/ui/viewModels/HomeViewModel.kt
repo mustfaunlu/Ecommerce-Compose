@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
-import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.ProductEntity
 import com.mustafaunlu.ecommerce_compose.domain.mapper.ProductListMapper
-import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.badge.UserCartBadgeUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.category.CategoryUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.product.GetAllProductsUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.product.SearchProductUseCase
@@ -26,7 +24,6 @@ class HomeViewModel @Inject constructor(
     private val categoryUseCase: CategoryUseCase,
     private val searchProductUseCase: SearchProductUseCase,
     private val mapper: ProductListMapper<ProductEntity, ProductUiData>,
-    private val badgeUseCase: UserCartBadgeUseCase,
 ) :
     ViewModel() {
     private val _products = MutableLiveData<ScreenState<List<ProductUiData>>>()
@@ -34,9 +31,6 @@ class HomeViewModel @Inject constructor(
 
     private val _categories = MutableLiveData<ScreenState<List<String>>>()
     val categories: LiveData<ScreenState<List<String>>> get() = _categories
-
-    private val _badge = MutableLiveData<ScreenState<UserCartBadgeEntity>>()
-    val badge: LiveData<ScreenState<UserCartBadgeEntity>> get() = _badge
 
     init {
         getAllCategory()
