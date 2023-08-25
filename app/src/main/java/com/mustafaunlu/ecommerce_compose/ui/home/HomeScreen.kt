@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -83,7 +82,7 @@ fun HomeScreen(
             }
 
             productState is ScreenState.Error || categoryState is ScreenState.Error -> {
-                Error(message = R.string.error)
+                Error(message = "Error")
             }
 
             productState is ScreenState.Loading || categoryState is ScreenState.Loading -> {
@@ -91,29 +90,10 @@ fun HomeScreen(
             }
 
             else -> {
-                Error(message = R.string.error)
+                Error(message = "Error")
             }
         }
     }
-}
-
-@Composable
-fun SearchBar(
-    modifier: Modifier = Modifier,
-    searchQuery: String,
-    onSearchTextChanged: (String) -> Unit,
-) {
-    OutlinedTextField(
-        value = searchQuery,
-        onValueChange = onSearchTextChanged,
-        label = { Text(text = stringResource(id = R.string.search_hint)) },
-        modifier = modifier
-            .fillMaxWidth().heightIn(min = 56.dp)
-            .padding(16.dp),
-        leadingIcon = {
-            Icon(imageVector = Icons.Filled.Search, contentDescription = null)
-        },
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -186,7 +166,7 @@ fun LoadingItemPreview() {
 fun ErrorPreview() {
     AppTheme {
         Box {
-            Error(R.string.error)
+            Error("Unexpected Error")
         }
     }
 }

@@ -69,7 +69,7 @@ fun ProfileScreen(
             }
 
             is ScreenState.Error -> {
-                Error(message = R.string.error)
+                Error(message = profileState.message)
             }
 
             ScreenState.Loading -> {

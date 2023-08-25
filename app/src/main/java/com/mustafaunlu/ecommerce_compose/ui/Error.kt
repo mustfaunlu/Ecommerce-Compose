@@ -1,52 +1,50 @@
 package com.mustafaunlu.ecommerce_compose.ui
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.mustafaunlu.ecommerce_compose.R
+import kotlinx.coroutines.delay
 
 @Composable
 fun Error(
-    @StringRes message: Int,
+    message: String,
     modifier: Modifier = Modifier,
     appState: EcommerceAppState = rememberEcommerceAppState(),
 ) {
     if (!appState.isOnline) {
         OfflineDialog(onRetry = appState::refreshOnline)
     } else {
-        Column(modifier = modifier.wrapContentSize(align = Alignment.Center)) {
-            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.error))
-            LottieAnimation(
-                composition = composition,
-                iterations = LottieConstants.IterateForever,
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterHorizontally)
-                    .fillMaxWidth(fraction = 0.8f)
-                    .height(200.dp),
-            )
+        var showSnackbar by remember {
+            mutableStateOf(true)
+        }
 
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(message),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                textAlign = TextAlign.Center,
-            )
+        LaunchedEffect(key1 = showSnackbar) {
+            if (showSnackbar) {
+                delay(2000)
+                showSnackbar = false
+            }
+        }
+
+        if (showSnackbar) {
+            androidx.compose.material.Snackbar(
+                modifier = modifier.padding(16.dp),
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(
+                    text = message,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
         }
     }
 }

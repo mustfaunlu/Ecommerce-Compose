@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
 import com.mustafaunlu.ecommerce_compose.ui.Error
@@ -64,7 +63,7 @@ fun ProductDetailScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         when (product) {
-            is ScreenState.Error -> Error(message = R.string.error)
+            is ScreenState.Error -> Error(message = product.message)
             ScreenState.Loading -> Loading()
             is ScreenState.Success -> SuccessScreen(
                 uiData = product.uiData,

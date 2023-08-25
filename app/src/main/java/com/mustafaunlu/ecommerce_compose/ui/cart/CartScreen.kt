@@ -19,16 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
-import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
 
 @Composable
 fun CartRoute(
@@ -87,7 +84,7 @@ fun CartScreen(
             }
 
             is ScreenState.Error -> {
-                Error(message = R.string.error)
+                Error(message = uiState.message)
             }
 
             is ScreenState.Success -> {
@@ -179,37 +176,3 @@ fun SuccessScreen(
         }
     }
 }
-
-@Composable
-@Preview
-fun CartScreenPreview() {
-    AppTheme {
-    }
-}
-
-val listOfUserCartUiData = listOf(
-    UserCartUiData(
-        userId = 1.toString(),
-        productId = 1,
-        title = "title",
-        price = 100,
-        quantity = 1,
-        imageUrl = "https://picsum.photos/200/300",
-    ),
-    UserCartUiData(
-        userId = 1.toString(),
-        productId = 1,
-        title = "title",
-        price = 100,
-        quantity = 1,
-        imageUrl = "https://picsum.photos/200/300",
-    ),
-    UserCartUiData(
-        userId = 1.toString(),
-        productId = 1,
-        title = "title",
-        price = 100,
-        quantity = 1,
-        imageUrl = "https://picsum.photos/200/300",
-    ),
-)
