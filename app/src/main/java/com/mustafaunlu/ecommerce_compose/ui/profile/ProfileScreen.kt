@@ -1,7 +1,12 @@
 package com.mustafaunlu.ecommerce_compose.ui.profile
 
-import androidx.compose.foundation.Image
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,15 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
@@ -60,9 +67,11 @@ fun ProfileScreen(
                     logout = logout,
                 )
             }
+
             is ScreenState.Error -> {
                 Error(message = R.string.error)
             }
+
             ScreenState.Loading -> {
                 Loading()
             }
@@ -80,15 +89,34 @@ fun SuccessScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        var darkThemeState by rememberSaveable { mutableStateOf(false) }
-        Image(
-            painter = painterResource(id = R.drawable.ic_plus),
+        var selectedImageUri by remember {
+            mutableStateOf<Uri?>(null)
+        }
+
+        val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri -> selectedImageUri = uri },
+        )
+
+        var darkTheme by remember {
+            mutableStateOf(false)
+        }
+
+        AsyncImage(
+            model = selectedImageUri,
+            contentScale = ContentScale.Crop,
+            error = painterResource(id = R.drawable.ic_plus),
             contentDescription = "Profile Picture",
-            modifier = Modifier.clickable { /* Handle click */ }
+            modifier = Modifier
+                .clickable {
+                    singlePhotoPickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                    )
+                }
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(32.dp)
+                .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), CircleShape)
+                .background(MaterialTheme.colorScheme.onPrimary)
                 .align(Alignment.CenterHorizontally),
         )
 
@@ -140,8 +168,8 @@ fun SuccessScreen(
             )
 
             Switch(
-                checked = darkThemeState,
-                onCheckedChange = { darkThemeState = it },
+                checked = darkTheme,
+                onCheckedChange = { darkTheme = !darkTheme },
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(15.dp),

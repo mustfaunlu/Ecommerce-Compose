@@ -27,6 +27,7 @@ class ProfileViewModel @Inject constructor(
     init {
         getUserInfosFromFirebase()
     }
+
     private fun getUserInfosFromFirebase() {
         _userInfos.value = ScreenState.Loading
         viewModelScope.launch {
