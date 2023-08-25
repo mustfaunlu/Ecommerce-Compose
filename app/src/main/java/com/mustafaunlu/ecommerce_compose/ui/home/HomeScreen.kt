@@ -25,7 +25,7 @@ import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.ProductUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.HomeViewModel
-import com.mustafaunlu.ecommorce_develop.ui.theme.AppTheme
+import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
 
 @Composable
 fun HomeRoute(
