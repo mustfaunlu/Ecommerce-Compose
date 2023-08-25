@@ -17,13 +17,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,6 +37,7 @@ import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.SignUpViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpRoute(
@@ -51,6 +55,7 @@ fun SignUpRoute(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(
     onCreateAccountButtonClicked: (UserInformationUiData) -> Unit,
@@ -64,11 +69,23 @@ fun SignUpScreen(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
+        var showSnackbar by remember {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(key1 = showSnackbar) {
+            if (showSnackbar) {
+                delay(2000)
+                showSnackbar = false
+            }
+        }
+
         var name by remember { mutableStateOf("") }
         var surname by remember { mutableStateOf("") }
         var email by remember { mutableStateOf("") }
         var phone by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
+        val keyboardController = LocalSoftwareKeyboardController.current
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
@@ -158,14 +175,29 @@ fun SignUpScreen(
 
         Button(
             onClick = {
-                checkEmptyFields(
-                    email = email,
-                    password = password,
-                    name = name,
-                    surname = surname,
-                    phone = phone,
-                    onSuccess = onCreateAccountButtonClicked,
-                )
+                if (
+                    name.isNotEmpty() &&
+                    surname.isNotEmpty() &&
+                    email.isNotEmpty() &&
+                    phone.isNotEmpty() &&
+                    password.isNotEmpty()
+                ) {
+                    onCreateAccountButtonClicked(
+                        UserInformationUiData(
+                            id = "",
+                            name = name,
+                            surname = surname,
+                            email = email,
+                            phone = phone,
+                            password = password,
+                            image = "",
+                            token = "",
+                        ),
+                    )
+                } else {
+                    keyboardController?.hide()
+                    showSnackbar = true
+                }
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -195,31 +227,21 @@ fun SignUpScreen(
                 }),
             )
         }
-    }
-}
 
-private fun checkEmptyFields(
-    email: String,
-    password: String,
-    name: String,
-    surname: String,
-    phone: String,
-    onSuccess: (UserInformationUiData) -> Unit,
-) {
-    if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && surname.isNotEmpty()) {
-        onSuccess(
-            UserInformationUiData(
-                id = "",
-                name = name,
-                surname = surname,
-                email = email,
-                phone = phone,
-                image = "",
-                password = password,
-                token = "",
-            ),
-        )
-    } else {
-        // Handle empty fields
+        Spacer(modifier = Modifier.weight(1f))
+
+        if (showSnackbar) {
+            androidx.compose.material.Snackbar(
+                modifier = Modifier.padding(16.dp),
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.medium
+                ) {
+                Text(
+                    text = stringResource(id = R.string.please_not_blanks),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+        }
     }
 }
