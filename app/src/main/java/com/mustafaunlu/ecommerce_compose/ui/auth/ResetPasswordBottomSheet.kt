@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,13 +25,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
+import com.mustafaunlu.ecommerce_compose.common.ScreenState
+import com.mustafaunlu.ecommerce_compose.ui.Error
+import com.mustafaunlu.ecommerce_compose.ui.viewModels.ForgotPwViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResetPasswordBottomSheet(onDismiss: () -> Unit) {
+fun ResetPasswordBottomSheet(
+    onDismiss: () -> Unit,
+    viewModel: ForgotPwViewModel = hiltViewModel()
+) {
     val modalBottomSheetState = rememberModalBottomSheetState()
+    val state by viewModel.forgotPassword.observeAsState()
 
+    when (state) {
+        is ScreenState.Loading -> {}
+        is ScreenState.Success -> {
+            onDismiss()
+        }
+
+        is ScreenState.Error -> {
+            Error(message = (state as ScreenState.Error).message)
+        }
+
+        else -> {
+            // do nothing
+        }
+    }
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = modalBottomSheetState,
@@ -65,7 +88,14 @@ fun ResetPasswordBottomSheet(onDismiss: () -> Unit) {
 
             Button(
                 onClick = {
-                    // Handle reset password button click
+                    if (
+                        email.isNotEmpty()
+                    ) {
+                        viewModel.forgotPassword(email = email)
+                    } else {
+                        return@Button
+                    }
+
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {

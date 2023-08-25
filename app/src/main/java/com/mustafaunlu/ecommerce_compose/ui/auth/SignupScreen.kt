@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
+import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.SignUpViewModel
 import kotlinx.coroutines.delay
@@ -50,24 +52,32 @@ fun SignUpRoute(
     }
     SignUpScreen(
         onCreateAccountButtonClicked = onCreateAccountButtonClicked,
-        signUpState = signUpState,
         navigateToSignInScreen = navigateToSignInScreen,
     )
+
+    when (signUpState) {
+        is ScreenState.Loading -> {}
+        is ScreenState.Error -> {
+            Error(message = (signUpState as ScreenState.Error).message)}
+        is ScreenState.Success -> {
+            navigateToSignInScreen()
+        }
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(
     onCreateAccountButtonClicked: (UserInformationUiData) -> Unit,
-    signUpState: ScreenState<UserInformationUiData>,
     navigateToSignInScreen: () -> Unit,
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.heightIn(56.dp))
 
         var showSnackbar by remember {
             mutableStateOf(false)

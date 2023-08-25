@@ -2,7 +2,6 @@ package com.mustafaunlu.ecommerce_compose.ui.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,7 +38,6 @@ import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.domain.entity.user.FirebaseSignInUserEntity
 import com.mustafaunlu.ecommerce_compose.ui.Error
-import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.SigInViewModel
 import kotlinx.coroutines.delay
 
@@ -59,29 +56,16 @@ fun SignInRoute(
         onSignInButtonClicked = onSignInButtonClicked,
     )
 
-    SuccessScreen(
-        loginState = firebaseLoginState,
-        navigateToHomeScreen = navigateToHomeScreen,
-    )
-}
+    when (firebaseLoginState) {
+        is ScreenState.Success -> {
+            navigateToHomeScreen()
+        }
+        ScreenState.Loading -> {
+            // Loading()
+        }
 
-@Composable
-fun SuccessScreen(
-    loginState: ScreenState<UserInformationUiData>,
-    navigateToHomeScreen: () -> Unit,
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        when (loginState) {
-            is ScreenState.Success -> {
-                navigateToHomeScreen()
-            }
-            ScreenState.Loading -> {
-                // Loading()
-            }
-
-            is ScreenState.Error -> {
-                Error(message = loginState.message)
-            }
+        is ScreenState.Error -> {
+            Error(message = (firebaseLoginState as ScreenState.Error).message)
         }
     }
 }
@@ -117,9 +101,11 @@ fun SignInScreen(
         var showSheet by remember { mutableStateOf(false) }
 
         if (showSheet) {
-            ResetPasswordBottomSheet {
-                showSheet = false
-            }
+            ResetPasswordBottomSheet(
+                onDismiss = {
+                    showSheet = false
+                },
+            )
         }
 
         OutlinedTextField(
@@ -229,9 +215,4 @@ fun SignInScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun SignInScreenPreview() {
 }
