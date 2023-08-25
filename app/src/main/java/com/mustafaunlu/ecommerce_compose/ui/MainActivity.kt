@@ -19,7 +19,8 @@ import com.mustafaunlu.ecommerce_compose.navigation.AppBottomNavBar
 import com.mustafaunlu.ecommerce_compose.navigation.AppNavHost
 import com.mustafaunlu.ecommerce_compose.navigation.SignIn
 import com.mustafaunlu.ecommerce_compose.navigation.SignUp
-import com.mustafaunlu.ecommorce_develop.ui.theme.AppTheme
+import com.mustafaunlu.ecommerce_compose.navigation.Splash
+import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,32 +29,39 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            App()
+            AppTheme {
+                App()
+            }
         }
     }
 }
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
-    AppTheme {
-        Surface(
-            modifier = modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            val navController = rememberNavController()
-            val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            when (navBackStackEntry?.destination?.route) {
-                SignIn.route -> bottomBarState.value = false
-                SignUp.route -> bottomBarState.value = false
-                else -> bottomBarState.value = true
-            }
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
+    ) {
+        val navController = rememberNavController()
+        val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        when (navBackStackEntry?.destination?.route) {
+            SignIn.route, SignUp.route, Splash.route -> bottomBarState.value = false
+            else -> bottomBarState.value = true
+        }
 
-            Scaffold(
-                bottomBar = { AppBottomNavBar(badgeState = 1, navController = navController, bottomBarState = bottomBarState) },
-            ) { paddingValues ->
-                AppNavHost(navController = navController, modifier = Modifier.padding(paddingValues))
-            }
+        Scaffold(
+            bottomBar = {
+                if (bottomBarState.value) {
+                    AppBottomNavBar(
+                        badgeState = 0,
+                        navController = navController,
+                        bottomBarState = bottomBarState,
+                    )
+                }
+            },
+        ) { paddingValues ->
+            AppNavHost(navController = navController, modifier = Modifier.padding(paddingValues))
         }
     }
 }

@@ -20,6 +20,10 @@ object ProductDetail : AppDestinations {
     )
 }
 
+object Splash : AppDestinations {
+    override val route = "splash"
+}
+
 object Cart : AppDestinations {
     override val route = "cart"
 }

@@ -13,13 +13,22 @@ import com.mustafaunlu.ecommerce_compose.ui.favorite.FavoriteRoute
 import com.mustafaunlu.ecommerce_compose.ui.home.HomeRoute
 import com.mustafaunlu.ecommerce_compose.ui.payment.PaymentRoute
 import com.mustafaunlu.ecommerce_compose.ui.profile.ProfileRoute
+import com.mustafaunlu.ecommerce_compose.ui.splash.SplashScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    NavHost(navController = navController, startDestination = SignIn.route, modifier = modifier) {
+    NavHost(navController = navController, startDestination = Splash.route, modifier = modifier) {
+        composable(Splash.route) {
+            SplashScreen(
+                navigateToHomeScreen = {
+                    navController.navigate(SignIn.route)
+                },
+            )
+        }
+
         composable(Home.route) {
             HomeRoute(
                 onProductClicked = {

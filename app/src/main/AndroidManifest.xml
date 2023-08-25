@@ -24,7 +24,8 @@
             android:name=".ui.MainActivity"
             android:screenOrientation="sensor"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.AppTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
