@@ -21,24 +21,32 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mustafaunlu.ecommerce_compose.R
 
 @Composable
-fun Error(@StringRes message: Int, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.wrapContentSize(align = Alignment.Center)) {
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.error))
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .align(alignment = Alignment.CenterHorizontally)
-                .fillMaxWidth(fraction = 0.8f)
-                .height(200.dp),
-        )
+fun Error(
+    @StringRes message: Int,
+    modifier: Modifier = Modifier,
+    appState: EcommerceAppState = rememberEcommerceAppState(),
+) {
+    if (!appState.isOnline) {
+        OfflineDialog(onRetry = appState::refreshOnline)
+    } else {
+        Column(modifier = modifier.wrapContentSize(align = Alignment.Center)) {
+            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.error))
+            LottieAnimation(
+                composition = composition,
+                iterations = LottieConstants.IterateForever,
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .fillMaxWidth(fraction = 0.8f)
+                    .height(200.dp),
+            )
 
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(message),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-            textAlign = TextAlign.Center,
-        )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(message),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }

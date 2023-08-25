@@ -54,8 +54,8 @@ fun AppBottomNavBar(
                         selected = currentRoute == item.route,
                         onClick = {
                             navController.navigate(item.route) {
-                                navController.graph.startDestinationRoute?.let { route ->
-                                    popUpTo(route) {
+                                navController.currentDestination?.route.let { route ->
+                                    popUpTo(route ?: Home.route) {
                                         saveState = true
                                     }
                                 }

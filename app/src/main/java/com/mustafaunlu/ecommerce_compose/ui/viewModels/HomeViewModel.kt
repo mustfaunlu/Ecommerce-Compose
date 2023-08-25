@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
+import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartBadgeEntity
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.ProductEntity
 import com.mustafaunlu.ecommerce_compose.domain.mapper.ProductListMapper
@@ -11,8 +13,6 @@ import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.badge.UserCartBadge
 import com.mustafaunlu.ecommerce_compose.domain.usecase.category.CategoryUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.product.GetAllProductsUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.product.SearchProductUseCase
-import com.mustafaunlu.ecommerce_compose.common.NetworkResponseState
-import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.uiData.ProductUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -43,17 +43,6 @@ class HomeViewModel @Inject constructor(
         getAllProducts()
     }
 
-    fun getBadgeState(userUniqueInfo: String) {
-        viewModelScope.launch {
-            badgeUseCase(userUniqueInfo).onEach {
-                when (it) {
-                    is NetworkResponseState.Error -> _badge.postValue(ScreenState.Error(it.exception.message!!))
-                    is NetworkResponseState.Loading -> _badge.postValue(ScreenState.Loading)
-                    is NetworkResponseState.Success -> _badge.postValue(ScreenState.Success(it.result))
-                }
-            }.launchIn(viewModelScope)
-        }
-    }
     private fun getAllProducts() {
         getAllProductsUseCase().onEach {
             when (it) {

@@ -35,10 +35,10 @@ class TokenManager @Inject constructor(
         return (System.currentTimeMillis() / 1000) < expirationTime
     }
 
-    private fun extractExpirationTimeFromToken(token: String) : Long {
+    private fun extractExpirationTimeFromToken(token: String): Long {
         var expirationTime = 0L
         JWT.decode(
-            token
+            token,
         ).also {
             it.tap { decodedJWT ->
                 expirationTime = decodedJWT.claimValueAsLong("exp").getOrElse { 0L }
