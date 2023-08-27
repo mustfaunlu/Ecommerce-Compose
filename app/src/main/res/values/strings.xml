@@ -93,4 +93,6 @@
     <string name="please_enter_cvc_code">Please enter CVC code</string>
     <string name="please_enter_address">Please enter address</string>
     <string name="retry">Retry</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
