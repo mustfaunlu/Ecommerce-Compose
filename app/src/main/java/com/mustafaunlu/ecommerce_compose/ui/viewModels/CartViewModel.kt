@@ -17,6 +17,11 @@ import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.badge.UserCartBadge
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
 import com.mustafaunlu.ecommerce_compose.utils.getUserIdFromSharedPref
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,13 +41,14 @@ class CartViewModel @Inject constructor(
     private val _totalPriceLiveData: MutableLiveData<Double> = MutableLiveData(0.0)
     val totalPriceLiveData: LiveData<Double> get() = _totalPriceLiveData
 
-    private val _badgeCount = MutableLiveData<Int>()
-    val badgeCount: LiveData<Int> get() = _badgeCount
+    private val _badgeCountState = MutableStateFlow<Int>(value = 0)
+    val badgeCount: StateFlow<Int> get() = _badgeCountState.asStateFlow()
 
     init {
         getCartsByUserId()
         getBadgeCount()
     }
+
     private fun getCartsByUserId() {
         viewModelScope.launch {
             cartUseCase(getUserIdFromSharedPref(sharedPreferences)).collect {
@@ -58,27 +64,40 @@ class CartViewModel @Inject constructor(
     }
 
     fun updateTotalPrice(cartList: List<UserCartUiData>) {
-        getCartsByUserId()
-        _totalPriceLiveData.value = calculateTotalPrice(cartList)
+        viewModelScope.launch {
+            _totalPriceLiveData.postValue(calculateTotalPrice(cartList))
+            updateBadgeCount(cartList.size)
+        }
+    }
+
+    fun updateBadgeCount(newCount: Int) {
+        viewModelScope.launch {
+            _badgeCountState.emit(newCount)
+            _badgeCountState.value = newCount
+        }
     }
     fun deleteUserCartItem(userCartUiData: UserCartUiData) {
         viewModelScope.launch {
             deleteCartUseCase(singleMapper.map(userCartUiData))
+            getCartsByUserId()
+            getBadgeCount()
         }
     }
     fun updateUserCartItem(userCartUiData: UserCartUiData) {
         viewModelScope.launch {
             updateCartUseCase(singleMapper.map(userCartUiData))
+            getCartsByUserId()
         }
     }
     fun getBadgeCount() {
-        viewModelScope.launch {
-            badgeUseCase(getUserIdFromSharedPref(sharedPreferences)).collect {
+        viewModelScope.launch(Dispatchers.IO) {
+            badgeUseCase(getUserIdFromSharedPref(sharedPreferences)).collectLatest {
                 when (it) {
-                    is NetworkResponseState.Error -> _badgeCount.postValue(0)
-                    is NetworkResponseState.Loading -> _badgeCount.postValue(0)
+                    is NetworkResponseState.Error -> {}
+                    is NetworkResponseState.Loading -> {}
                     is NetworkResponseState.Success -> {
-                        _badgeCount.postValue(it.result)
+                        _badgeCountState.emit(it.result)
+                        _badgeCountState.value = it.result
                     }
                 }
             }
