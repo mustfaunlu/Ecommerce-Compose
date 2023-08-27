@@ -19,6 +19,7 @@ import com.mustafaunlu.ecommerce_compose.ui.splash.SplashScreen
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    badgeCount: Int
 ) {
     NavHost(navController = navController, startDestination = Splash.route, modifier = modifier) {
         composable(Splash.route) {
@@ -38,14 +39,16 @@ fun AppNavHost(
             )
         }
         composable(ProductDetail.routeWithArgs, arguments = ProductDetail.arguments) {
-            DetailRoute()
+            DetailRoute(
+                badgeCount = badgeCount,
+            )
         }
         composable(Cart.route) {
             CartRoute(
                 onClickedBuyNowButton = {
                     navController.navigate(Payment.route)
                 },
-                onProductClicked = {
+                onCartClicked = {
                     val route = "${ProductDetail.route}/${it.productId}"
                     navController.navigate(route = route)
                 },
