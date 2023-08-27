@@ -13,7 +13,6 @@ import com.mustafaunlu.ecommerce_compose.domain.entity.product.DetailProductEnti
 import com.mustafaunlu.ecommerce_compose.domain.entity.product.FavoriteProductEntity
 import com.mustafaunlu.ecommerce_compose.domain.mapper.ProductBaseMapper
 import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.CartUseCase
-import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.badge.UserCartBadgeUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.favorite.FavoriteUseCase
 import com.mustafaunlu.ecommerce_compose.domain.usecase.product.GetSingleProductUseCase
 import com.mustafaunlu.ecommerce_compose.ui.uiData.DetailProductUiData
@@ -29,7 +28,6 @@ class DetailViewModel @Inject constructor(
     private val mapper: ProductBaseMapper<DetailProductEntity, DetailProductUiData>,
     private val favoriteUseCase: FavoriteUseCase,
     private val cartToFavoriteUiMapper: ProductBaseMapper<UserCartEntity, FavoriteProductEntity>,
-    private val badgeUseCase: UserCartBadgeUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
