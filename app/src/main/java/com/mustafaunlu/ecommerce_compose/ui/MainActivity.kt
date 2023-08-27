@@ -93,7 +93,6 @@ fun App(
                 AppNavHost(
                     navController = navController,
                     modifier = Modifier.padding(paddingValues),
-                    badgeCount = badgeCount,
                 )
             }
         }
