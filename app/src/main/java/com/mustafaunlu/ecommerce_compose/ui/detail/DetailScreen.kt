@@ -36,17 +36,21 @@ import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.DetailProductUiData
+import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
 import com.mustafaunlu.ecommerce_compose.ui.viewModels.DetailViewModel
 
 @Composable
-fun DetailRoute(viewModel: DetailViewModel = hiltViewModel()) {
+fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), cartViewModel: CartViewModel = hiltViewModel(), badgeCount: Int ) {
     val product by viewModel.product.observeAsState(initial = ScreenState.Loading)
 
     val onAddToCartButtonClicked: (UserCartEntity) -> Unit =
-        { userCart -> viewModel.addToCart(userCart) }
+        { userCart ->
+            viewModel.addToCart(userCart)
+        }
 
     val onAddToFavoritesButtonClicked: (UserCartEntity) -> Unit =
         { userCartUiData -> viewModel.addToFavorite(userCartUiData) }
+
 
     ProductDetailScreen(
         product = product,
@@ -70,8 +74,7 @@ fun ProductDetailScreen(
                 modifier = Modifier.padding(16.dp),
                 onAddToCartButtonClicked = onAddToCartButtonClicked,
                 onAddToFavoritesButtonClicked = onAddToFavoritesButtonClicked,
-
-            )
+                )
         }
     }
 }
@@ -115,7 +118,8 @@ fun SuccessScreen(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 repeat(pageCount) { iteration ->
-                    val color = if (state.currentPage == iteration) MaterialTheme.colorScheme.primary else Color.LightGray
+                    val color =
+                        if (state.currentPage == iteration) MaterialTheme.colorScheme.primary else Color.LightGray
                     Box(
                         modifier = Modifier
                             .padding(2.dp)
@@ -123,7 +127,7 @@ fun SuccessScreen(
                             .size(20.dp)
                             .background(color = color),
 
-                    )
+                        )
                 }
             }
             Text(
