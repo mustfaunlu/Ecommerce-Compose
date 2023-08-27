@@ -31,14 +31,13 @@ import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
 fun CartRoute(
     viewModel: CartViewModel = hiltViewModel(),
     onClickedBuyNowButton: () -> Unit,
-    onProductClicked: (UserCartUiData) -> Unit,
+    onCartClicked: (UserCartUiData) -> Unit,
 ) {
     val cartState by viewModel.userCarts.observeAsState(initial = ScreenState.Loading)
-    val totalPrice by viewModel.totalPriceLiveData.observeAsState(initial = 0.0)
-
-    val updateCartItem = { cartUiData: UserCartUiData ->
-        viewModel.updateUserCartItem(cartUiData)
+    val onCartLongClicked = { cartUiData: UserCartUiData ->
+        viewModel.deleteUserCartItem(cartUiData)
     }
+
 
     val updateTotalAmount = { uiData: List<UserCartUiData> ->
         viewModel.updateTotalPrice(uiData)
@@ -46,61 +45,40 @@ fun CartRoute(
 
     val onDecrement = { cartUiData: UserCartUiData ->
         if (cartUiData.quantity > 1) {
-            val updated = cartUiData.copy(quantity = cartUiData.quantity.dec())
-            updateCartItem(updated)
+            viewModel.updateUserCartItem(cartUiData.copy(quantity = cartUiData.quantity - 1))
         }
     }
 
     val onIncrement = { cartUiData: UserCartUiData ->
-        val updated = cartUiData.copy(quantity = cartUiData.quantity.inc())
-        updateCartItem(updated)
+        viewModel.updateUserCartItem(cartUiData.copy(quantity = cartUiData.quantity + 1))
     }
 
-    CartScreen(
-        uiState = cartState,
-        onClickedBuyNowButton = onClickedBuyNowButton,
-        onProductClicked = onProductClicked,
-        totalPrice = totalPrice,
-        onDecrement = onDecrement,
-        onIncrement = onIncrement,
-        updateTotalAmount = updateTotalAmount,
-    )
-}
+    when (cartState) {
+        is ScreenState.Loading -> {
+            Loading()
+        }
 
-@Composable
-fun CartScreen(
-    uiState: ScreenState<List<UserCartUiData>>,
-    onClickedBuyNowButton: () -> Unit,
-    onProductClicked: (UserCartUiData) -> Unit,
-    totalPrice: Double,
-    onDecrement: (UserCartUiData) -> Unit,
-    onIncrement: (UserCartUiData) -> Unit,
-    updateTotalAmount: (List<UserCartUiData>) -> Unit,
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        when (uiState) {
-            is ScreenState.Loading -> {
-                Loading()
-            }
+        is ScreenState.Error -> {
+            Error(message = (cartState as ScreenState.Error).message)
+        }
 
-            is ScreenState.Error -> {
-                Error(message = uiState.message)
-            }
-
-            is ScreenState.Success -> {
-                SuccessScreen(
-                    uiData = uiState.uiData,
-                    modifier = Modifier.padding(16.dp),
-                    onProductClicked = onProductClicked,
-                    onClickedBuyNowButton = onClickedBuyNowButton,
-                    totalPrice = totalPrice,
-                    onDecrement = onDecrement,
-                    onIncrement = onIncrement,
-                    updateTotalAmount = updateTotalAmount,
-                )
-            }
+        is ScreenState.Success -> {
+            viewModel.updateTotalPrice((cartState as ScreenState.Success<List<UserCartUiData>>).uiData)
+            val totalPrice by viewModel.totalPriceLiveData.observeAsState(initial = 0.0)
+            SuccessScreen(
+                uiData = (cartState as ScreenState.Success).uiData,
+                modifier = Modifier.padding(16.dp),
+                onCartClicked = onCartClicked,
+                onCartLongClicked = onCartLongClicked,
+                onClickedBuyNowButton = onClickedBuyNowButton,
+                totalPrice = totalPrice,
+                onDecrement = onDecrement,
+                onIncrement = onIncrement,
+                updateTotalAmount = updateTotalAmount,
+            )
         }
     }
+
 }
 
 @Composable
@@ -108,19 +86,20 @@ fun SuccessScreen(
     uiData: List<UserCartUiData>,
     modifier: Modifier = Modifier,
     onClickedBuyNowButton: () -> Unit,
-    onProductClicked: (UserCartUiData) -> Unit,
+    onCartClicked: (UserCartUiData) -> Unit,
+    onCartLongClicked: (UserCartUiData) -> Unit,
     totalPrice: Double,
     onDecrement: (UserCartUiData) -> Unit,
     onIncrement: (UserCartUiData) -> Unit,
     updateTotalAmount: (List<UserCartUiData>) -> Unit,
-
-) {
+    ) {
     Box(modifier = modifier) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(uiData.size) { cart ->
                 CartItem(
                     cartUiData = uiData[cart],
-                    onCartItemClicked = onProductClicked,
+                    onCartItemClicked = onCartClicked,
+                    onCartLongClicked = onCartLongClicked,
                     onIncrement = {
                         onIncrement(uiData[cart])
                         updateTotalAmount(uiData)
