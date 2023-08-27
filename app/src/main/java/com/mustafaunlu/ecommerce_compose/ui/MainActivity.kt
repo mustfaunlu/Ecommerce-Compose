@@ -16,8 +16,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -65,7 +65,9 @@ fun App(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
     ) {
-        val badgeCount by cartViewModel.badgeCount.observeAsState(initial = 0)
+        cartViewModel.getBadgeCount()
+        val badgeCount by cartViewModel.badgeCount.collectAsState()
+
         if (!appState.isOnline) {
             OfflineDialog(onRetry = appState::refreshOnline)
         } else {
@@ -81,9 +83,9 @@ fun App(
                 bottomBar = {
                     if (bottomBarState.value) {
                         AppBottomNavBar(
-                            badgeState = badgeCount,
                             navController = navController,
                             bottomBarState = bottomBarState,
+                            badgeState = badgeCount,
                         )
                     }
                 },
@@ -91,6 +93,7 @@ fun App(
                 AppNavHost(
                     navController = navController,
                     modifier = Modifier.padding(paddingValues),
+                    badgeCount = badgeCount,
                 )
             }
         }
@@ -133,7 +136,7 @@ class EcommerceAppState(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork) ?: return false
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         } else {
             cm?.activeNetworkInfo?.isConnectedOrConnecting == true
         }
