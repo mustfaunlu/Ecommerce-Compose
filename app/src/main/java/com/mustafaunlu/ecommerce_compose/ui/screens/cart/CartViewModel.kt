@@ -17,7 +17,6 @@ import com.mustafaunlu.ecommerce_compose.domain.usecase.cart.badge.UserCartBadge
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
 import com.mustafaunlu.ecommerce_compose.utils.getUserIdFromSharedPref
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,6 +56,7 @@ class CartViewModel @Inject constructor(
                     is NetworkResponseState.Loading -> _userCarts.postValue(ScreenState.Loading)
                     is NetworkResponseState.Success -> {
                         _userCarts.postValue(ScreenState.Success(mapper.map(it.result)))
+                        updateBadgeCount(it.result.size)
                     }
                 }
             }
@@ -66,13 +66,11 @@ class CartViewModel @Inject constructor(
     fun updateTotalPrice(cartList: List<UserCartUiData>) {
         viewModelScope.launch {
             _totalPriceLiveData.postValue(calculateTotalPrice(cartList))
-            updateBadgeCount(cartList.size)
         }
     }
 
     fun updateBadgeCount(newCount: Int) {
         viewModelScope.launch {
-            _badgeCountState.emit(newCount)
             _badgeCountState.value = newCount
         }
     }
@@ -80,7 +78,6 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             deleteCartUseCase(singleMapper.map(userCartUiData))
             getCartsByUserId()
-            getBadgeCount()
         }
     }
     fun updateUserCartItem(userCartUiData: UserCartUiData) {
@@ -90,13 +87,12 @@ class CartViewModel @Inject constructor(
         }
     }
     fun getBadgeCount() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             badgeUseCase(getUserIdFromSharedPref(sharedPreferences)).collectLatest {
                 when (it) {
                     is NetworkResponseState.Error -> {}
                     is NetworkResponseState.Loading -> {}
                     is NetworkResponseState.Success -> {
-                        _badgeCountState.emit(it.result)
                         _badgeCountState.value = it.result
                     }
                 }

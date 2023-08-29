@@ -31,10 +31,12 @@ fun CartRoute(
     viewModel: CartViewModel = hiltViewModel(),
     onClickedBuyNowButton: () -> Unit,
     onCartClicked: (UserCartUiData) -> Unit,
+    onBadgeCountChange: (Int) -> Unit
 ) {
     val cartState by viewModel.userCarts.observeAsState(initial = ScreenState.Loading)
     val onCartLongClicked = { cartUiData: UserCartUiData ->
         viewModel.deleteUserCartItem(cartUiData)
+        onBadgeCountChange(viewModel.badgeCount.value.minus(1))
     }
 
 

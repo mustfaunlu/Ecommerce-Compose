@@ -39,12 +39,13 @@ import com.mustafaunlu.ecommerce_compose.ui.uiData.DetailProductUiData
 import com.mustafaunlu.ecommerce_compose.ui.screens.cart.CartViewModel
 
 @Composable
-fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), cartViewModel: CartViewModel = hiltViewModel()) {
+fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), onBadgeCountChange: (Int) -> Unit, cartViewModel: CartViewModel = hiltViewModel() ) {
     val product by viewModel.product.observeAsState(initial = ScreenState.Loading)
 
     val onAddToCartButtonClicked: (UserCartEntity) -> Unit =
         { userCart ->
             viewModel.addToCart(userCart)
+            onBadgeCountChange(cartViewModel.badgeCount.value.plus(1))
         }
 
     val onAddToFavoritesButtonClicked: (UserCartEntity) -> Unit =

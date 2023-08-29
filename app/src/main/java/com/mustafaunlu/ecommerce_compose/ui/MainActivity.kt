@@ -49,7 +49,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                App()
+                val cartViewModel: CartViewModel = hiltViewModel()
+                val badgeCount by cartViewModel.badgeCount.collectAsState()
+                App(badgeCount = badgeCount) { newBadgeCount ->
+                    cartViewModel.updateBadgeCount(newBadgeCount)
+                }
             }
         }
     }
@@ -59,15 +63,13 @@ class MainActivity : ComponentActivity() {
 fun App(
     modifier: Modifier = Modifier,
     appState: EcommerceAppState = rememberEcommerceAppState(),
-    cartViewModel: CartViewModel = hiltViewModel(),
+    badgeCount: Int,
+    onBadgeCountChange: (Int) -> Unit
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
     ) {
-        cartViewModel.getBadgeCount()
-        val badgeCount by cartViewModel.badgeCount.collectAsState()
-
         if (!appState.isOnline) {
             OfflineDialog(onRetry = appState::refreshOnline)
         } else {
@@ -93,6 +95,7 @@ fun App(
                 AppNavHost(
                     navController = navController,
                     modifier = Modifier.padding(paddingValues),
+                    onBadgeCountChange = onBadgeCountChange,
                 )
             }
         }
