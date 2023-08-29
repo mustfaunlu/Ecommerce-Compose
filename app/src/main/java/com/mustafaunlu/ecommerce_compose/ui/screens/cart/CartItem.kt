@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.cart
+package com.mustafaunlu.ecommerce_compose.ui.screens.cart
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable

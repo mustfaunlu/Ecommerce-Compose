@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.home
+package com.mustafaunlu.ecommerce_compose.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

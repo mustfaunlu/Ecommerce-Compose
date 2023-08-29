@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.favorite
+package com.mustafaunlu.ecommerce_compose.ui.screens.favorite
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +11,6 @@ import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.FavoriteUiData
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.FavoriteViewModel
 
 @Composable
 fun FavoriteRoute(

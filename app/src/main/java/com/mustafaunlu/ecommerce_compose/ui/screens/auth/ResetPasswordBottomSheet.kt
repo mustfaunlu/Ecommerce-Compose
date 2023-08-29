@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.auth
+package com.mustafaunlu.ecommerce_compose.ui.screens.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mustafaunlu.ecommerce_compose.R
 import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.ForgotPwViewModel
+import com.mustafaunlu.ecommerce_compose.ui.screens.auth.viewModels.ForgotPwViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

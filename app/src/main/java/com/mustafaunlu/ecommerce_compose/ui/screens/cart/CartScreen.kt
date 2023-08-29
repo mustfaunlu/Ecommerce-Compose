@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.cart
+package com.mustafaunlu.ecommerce_compose.ui.screens.cart
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +25,6 @@ import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserCartUiData
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
 
 @Composable
 fun CartRoute(

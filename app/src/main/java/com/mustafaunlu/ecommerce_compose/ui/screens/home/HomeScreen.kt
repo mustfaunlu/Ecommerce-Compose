@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.home
+package com.mustafaunlu.ecommerce_compose.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,6 @@ import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
 import com.mustafaunlu.ecommerce_compose.ui.uiData.ProductUiData
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.HomeViewModel
 
 @Composable
 fun HomeRoute(

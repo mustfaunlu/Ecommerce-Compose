@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.splash
+package com.mustafaunlu.ecommerce_compose.ui.screens.splash
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

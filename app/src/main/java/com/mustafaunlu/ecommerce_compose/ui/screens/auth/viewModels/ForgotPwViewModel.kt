@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.viewModels
+package com.mustafaunlu.ecommerce_compose.ui.screens.auth.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

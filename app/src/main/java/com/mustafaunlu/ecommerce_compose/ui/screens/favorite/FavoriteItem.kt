@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.favorite
+package com.mustafaunlu.ecommerce_compose.ui.screens.favorite
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

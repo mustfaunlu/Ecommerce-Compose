@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.viewModels // ktlint-disable package-name
+package com.mustafaunlu.ecommerce_compose.ui.screens.auth.viewModels // ktlint-disable package-name
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

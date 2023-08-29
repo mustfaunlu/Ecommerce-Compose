@@ -39,7 +39,7 @@ import com.mustafaunlu.ecommerce_compose.navigation.SignIn
 import com.mustafaunlu.ecommerce_compose.navigation.SignUp
 import com.mustafaunlu.ecommerce_compose.navigation.Splash
 import com.mustafaunlu.ecommerce_compose.ui.theme.AppTheme
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
+import com.mustafaunlu.ecommerce_compose.ui.screens.cart.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

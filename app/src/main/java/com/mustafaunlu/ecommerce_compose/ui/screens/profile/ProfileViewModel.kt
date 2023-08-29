@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.viewModels
+package com.mustafaunlu.ecommerce_compose.ui.screens.profile
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData

@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.payment
+package com.mustafaunlu.ecommerce_compose.ui.screens.payment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -5,15 +5,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mustafaunlu.ecommerce_compose.ui.auth.SignInRoute
-import com.mustafaunlu.ecommerce_compose.ui.auth.SignUpRoute
-import com.mustafaunlu.ecommerce_compose.ui.cart.CartRoute
-import com.mustafaunlu.ecommerce_compose.ui.detail.DetailRoute
-import com.mustafaunlu.ecommerce_compose.ui.favorite.FavoriteRoute
-import com.mustafaunlu.ecommerce_compose.ui.home.HomeRoute
-import com.mustafaunlu.ecommerce_compose.ui.payment.PaymentRoute
-import com.mustafaunlu.ecommerce_compose.ui.profile.ProfileRoute
-import com.mustafaunlu.ecommerce_compose.ui.splash.SplashScreen
+import com.mustafaunlu.ecommerce_compose.ui.screens.auth.SignInRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.auth.SignUpRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.cart.CartRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.detail.DetailRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.favorite.FavoriteRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.home.HomeRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.payment.PaymentRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.profile.ProfileRoute
+import com.mustafaunlu.ecommerce_compose.ui.screens.splash.SplashScreen
 
 @Composable
 fun AppNavHost(

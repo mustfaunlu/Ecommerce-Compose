@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.profile
+package com.mustafaunlu.ecommerce_compose.ui.screens.profile
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -41,7 +41,6 @@ import com.mustafaunlu.ecommerce_compose.common.ScreenState
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.UserInformationUiData
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.ProfileViewModel
 
 @Composable
 fun ProfileRoute(

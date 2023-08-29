@@ -1,4 +1,4 @@
-package com.mustafaunlu.ecommerce_compose.ui.detail
+package com.mustafaunlu.ecommerce_compose.ui.screens.detail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -36,8 +36,7 @@ import com.mustafaunlu.ecommerce_compose.domain.entity.cart.UserCartEntity
 import com.mustafaunlu.ecommerce_compose.ui.Error
 import com.mustafaunlu.ecommerce_compose.ui.Loading
 import com.mustafaunlu.ecommerce_compose.ui.uiData.DetailProductUiData
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.CartViewModel
-import com.mustafaunlu.ecommerce_compose.ui.viewModels.DetailViewModel
+import com.mustafaunlu.ecommerce_compose.ui.screens.cart.CartViewModel
 
 @Composable
 fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), cartViewModel: CartViewModel = hiltViewModel()) {
