@@ -58,7 +58,11 @@ fun AppNavHost(
         composable(Profile.route) {
             ProfileRoute(
                 logout = {
-                    navController.navigate(SignIn.route)
+                    navController.navigate(SignIn.route) {
+                        popUpTo(SignIn.route) {
+                            inclusive = true
+                        }
+                    }
                 },
             )
         }
