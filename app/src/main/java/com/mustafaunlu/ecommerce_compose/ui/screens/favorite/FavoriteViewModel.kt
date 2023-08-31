@@ -23,7 +23,7 @@ class FavoriteViewModel @Inject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val mapper: ProductListMapper<FavoriteProductEntity, FavoriteUiData>,
     private val singleMapper: ProductBaseMapper<FavoriteUiData, FavoriteProductEntity>,
-    private val deleteCartUseCase: DeleteFavoriteUseCase,
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
     private val _favoriteCarts = MutableLiveData<ScreenState<List<FavoriteUiData>>>()
@@ -56,7 +56,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun deleteFavoriteItem(favoriteUiData: FavoriteUiData) {
         viewModelScope.launch {
-            deleteCartUseCase(singleMapper.map(favoriteUiData))
+            deleteFavoriteUseCase(singleMapper.map(favoriteUiData))
             getFavoriteProducts()
         }
     }
